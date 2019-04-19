@@ -28,16 +28,15 @@ function Boot() {
 						</MapDispatchContext.Provider>
 					</div>
 				</Content>
-				<Footer style={{ textAlign: "center" }}>© 2019 MEDWING GmbH, Berlin. Alle Rechte vorbehalten.</Footer>
+				<Footer style={{ textAlign: "center" }}>
+					© 2019 MEDWING GmbH, Berlin. Alle Rechte vorbehalten.
+				</Footer>
 			</Layout>
 		</Layout>
 	);
 }
 
-export const useDispatch = () => {
-	return useContext(MapDispatchContext);
-};
-
+export const useDispatch = () => useContext(MapDispatchContext);
 export const useGlobalState = prop => {
 	const state = useContext(MapStateContext);
 

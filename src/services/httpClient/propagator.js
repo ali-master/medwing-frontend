@@ -161,7 +161,7 @@ class HttpPropagator {
 	 */
 	update(options = {}) {
 		return this.fetch({
-			method: "patch",
+			method: "PUT",
 			...options,
 		});
 	}
@@ -239,7 +239,9 @@ class HttpPropagator {
 	_renderError(error) {
 		const { response, request, config } = error;
 
-		this.log === "console" ? logger(error) : typeof this.log === "function" && this.log(error);
+		this.log === "console"
+			? logger(error)
+			: typeof this.log === "function" && this.log(error);
 
 		if (error.json) {
 			return error.json().then(errorObject => {
@@ -253,7 +255,9 @@ class HttpPropagator {
 				config,
 				info: {
 					status: isEmpty(response) ? 0 : response.status,
-					message: isEmpty(response) ? "Your computer lost its internet connection" : response.data.message,
+					message: isEmpty(response)
+						? "Your computer lost its internet connection"
+						: response.data.message,
 				},
 			};
 		}
@@ -289,7 +293,10 @@ class HttpPropagator {
 	 * @return {Object} An object of URL native function but if we use toString buit-in function then it will be: "http://api.com/api/users/1/test/info/2"
 	 */
 	_assignRestStringToURL(rest = "", params = []) {
-		let path = last(this.baseURL.split("")) === "/" ? `${this.baseURL}${rest}` : `${this.baseURL}/${rest}`;
+		let path =
+			last(this.baseURL.split("")) === "/"
+				? `${this.baseURL}${rest}`
+				: `${this.baseURL}/${rest}`;
 
 		if (path.indexOf("//") > -1) path = path.replace(/\/\//g, "/");
 		if (params.length !== 0) {

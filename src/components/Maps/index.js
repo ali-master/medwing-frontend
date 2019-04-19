@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, memo } from "react";
 // Styles
 import styled from "@emotion/styled";
 import { Row, Col, Button, Divider } from "antd";
@@ -9,6 +9,8 @@ import Markers from "../Markers/";
 import Maybe from "../Maybe/";
 // Utilities
 import { useDispatch, useGlobalState } from "../../App";
+// Http manager
+import httpClient from "../../storage/globals/";
 
 const MapInformationWrapper = styled.div`
 	padding-left: 20px;
@@ -20,28 +22,45 @@ const MapWrapper = styled.div`
 	height: 100%;
 	position: relative;
 `;
-
+let Inserted = false;
 function MapContainer() {
 	const MarkersState = useGlobalState("markers");
 	const dispatch = useDispatch();
 	const [isVisibleModal, setVisibleModal] = useState(false);
 
+	if (!Inserted) {
+		Inserted = true;
+		httpClient
+			.endpoint("getMarkers")
+			.fire()
+			.then(({ Result }) => {
+				// Insert all saved markers
+				dispatch({
+					type: "markers/insertMany",
+					payload: Result,
+				});
+			});
+	}
+
 	const submitedHandleMarkerForm = markerDetail => {
-		// set false to invisible modal
-		setVisibleModal(false);
-		// add a new marker into the store
-		dispatch({
-			type: "markers/add",
-			payload: {
-				...markerDetail,
-			},
-		});
+		httpClient
+			.endpoint("addMarker")
+			.fire(markerDetail)
+			.then(({ Result }) => {
+				// set false to invisible modal
+				setVisibleModal(false);
+				// add a new marker into the store
+				dispatch({
+					type: "markers/insert",
+					payload: Result,
+				});
+			});
 	};
 
 	return (
 		<Fragment>
 			<Row css={{ marginTop: 100 }}>
-				<Col span={16} offset={4}>
+				<Col span={22} offset={1}>
 					<Row>
 						<Col css={{ height: 600 }} span={14}>
 							<MapWrapper className="clearfix">
@@ -52,7 +71,12 @@ function MapContainer() {
 							<MapInformationWrapper>
 								<Row>
 									<Col span={24}>
-										<Button type="primary" onClick={() => setVisibleModal(true)}>
+										<Button
+											type="primary"
+											onClick={() =>
+												setVisibleModal(true)
+											}
+										>
 											Add new marker
 										</Button>
 										<Divider />
@@ -67,10 +91,15 @@ function MapContainer() {
 				</Col>
 			</Row>
 			<Maybe condition={isVisibleModal}>
-				<EditMarker isNew visible={isVisibleModal} onSubmit={submitedHandleMarkerForm} onCancel={() => setVisibleModal(false)} />
+				<EditMarker
+					isNew
+					visible={isVisibleModal}
+					onSubmit={submitedHandleMarkerForm}
+					onCancel={() => setVisibleModal(false)}
+				/>
 			</Maybe>
 		</Fragment>
 	);
 }
 
-export default MapContainer;
+export default memo(MapContainer);
