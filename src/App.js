@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { markersReducer, initialMarkersState } from "./reducers/";
+import { globalReducer, initialMarkersState } from "./reducers/";
 // Components
 import Maps from "./components/Maps/";
 // Ant components
@@ -9,12 +9,12 @@ import "./scss/App.scss";
 
 // Contexts
 const MapStateContext = createContext(initialMarkersState);
-const MapDispatchContext = createContext(markersReducer);
+const MapDispatchContext = createContext(globalReducer);
 
 const { Content, Footer } = Layout;
 
 function Boot() {
-	const [Markers, dispatch] = useReducer(markersReducer, initialMarkersState);
+	const [Markers, dispatch] = useReducer(globalReducer, initialMarkersState);
 
 	return (
 		<Layout style={{ minHeight: "100vh" }}>

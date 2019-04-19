@@ -4,7 +4,7 @@ const initialMarkersState = {
 	position: { lat: null, lng: null },
 	markers: [{ id: 1, title: "Leipzig", description: "Leipzig", lat: 38.575078, lng: -8.945406 }],
 };
-const markersReducer = (state, action) => {
+const globalReducer = (state, action) => {
 	const { id, title, description, lat, lng } = action.payload;
 	const updateState = R.merge(state);
 	switch (action.type) {
@@ -23,4 +23,4 @@ const markersReducer = (state, action) => {
 	}
 };
 
-export { markersReducer, initialMarkersState };
+export { globalReducer, initialMarkersState };
