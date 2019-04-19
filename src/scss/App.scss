@@ -1,0 +1,9 @@
+@import "./text-colors.scss";
+
+.clearfix {
+	&::after {
+		content: "";
+		clear: both;
+		display: block;
+	}
+}

@@ -1,0 +1,35 @@
+{
+	"presets": [
+		"react-app",
+		[
+			"@emotion/babel-preset-css-prop",
+			{
+				"sourceMap": true,
+				"autoLabel": true,
+				"labelFormat": "[local]"
+			}
+		]
+	],
+	"plugins": [
+		[
+			"@babel/plugin-proposal-decorators",
+			{
+				"legacy": true
+			}
+		],
+		[
+			"@babel/plugin-proposal-class-properties",
+			{
+				"loose": true
+			}
+		],
+		[
+			"import",
+			{
+				"libraryName": "antd",
+				"libraryDirectory": "es",
+				"style": true
+			}
+		]
+	]
+}
